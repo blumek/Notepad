@@ -10,6 +10,7 @@ class NoteTest {
     private static final String NOTE_CONTENT = "NOTE_CONTENT";
     private static final String ANOTHER_NOTE_ID = "ANOTHER_NOTE_ID";
     private static final String ANOTHER_NOTE_TITLE = "ANOTHER_NOTE_TITLE";
+    public static final String NOTE_PASSWORD = "NOTE_PASSWORD";
 
     @Test
     void builderTest_onlyId() {
@@ -39,17 +40,28 @@ class NoteTest {
     }
 
     @Test
+    void builderTest_onlyPassword() {
+        Note note = Note.builder()
+                .password(NOTE_PASSWORD)
+                .build();
+
+        assertEquals(NOTE_PASSWORD, note.getPassword());
+    }
+
+    @Test
     void equalsTest_equalObjects() {
         Note note = Note.builder()
                 .id(NOTE_ID)
                 .title(NOTE_TITLE)
                 .content(NOTE_CONTENT)
+                .password(NOTE_PASSWORD)
                 .build();
 
         Note anotherNote = Note.builder()
                 .id(NOTE_ID)
                 .title(NOTE_TITLE)
                 .content(NOTE_CONTENT)
+                .password(NOTE_PASSWORD)
                 .build();
 
         assertEquals(anotherNote, note);
@@ -61,12 +73,14 @@ class NoteTest {
                 .id(NOTE_ID)
                 .title(NOTE_TITLE)
                 .content(NOTE_CONTENT)
+                .password(NOTE_PASSWORD)
                 .build();
 
         Note anotherNote = Note.builder()
                 .id(ANOTHER_NOTE_ID)
                 .title(ANOTHER_NOTE_TITLE)
                 .content(NOTE_CONTENT)
+                .password(NOTE_PASSWORD)
                 .build();
 
         assertNotEquals(anotherNote, note);
@@ -78,12 +92,14 @@ class NoteTest {
                 .id(NOTE_ID)
                 .title(NOTE_TITLE)
                 .content(NOTE_CONTENT)
+                .password(NOTE_PASSWORD)
                 .build();
 
         Note anotherNote = Note.builder()
                 .id(NOTE_ID)
                 .title(NOTE_TITLE)
                 .content(NOTE_CONTENT)
+                .password(NOTE_PASSWORD)
                 .build();
 
         assertEquals(anotherNote.hashCode(), note.hashCode());
@@ -95,12 +111,14 @@ class NoteTest {
                 .id(NOTE_ID)
                 .title(NOTE_TITLE)
                 .content(NOTE_CONTENT)
+                .password(NOTE_PASSWORD)
                 .build();
 
         Note anotherNote = Note.builder()
                 .id(ANOTHER_NOTE_ID)
                 .title(ANOTHER_NOTE_TITLE)
                 .content(NOTE_CONTENT)
+                .password(NOTE_PASSWORD)
                 .build();
 
         assertNotEquals(anotherNote.hashCode(), note.hashCode());

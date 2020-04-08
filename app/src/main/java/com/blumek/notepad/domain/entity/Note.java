@@ -9,4 +9,5 @@ public class Note {
     String id;
     String title;
     String content;
+    String password;
 }
