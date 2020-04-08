@@ -1,8 +1,10 @@
-package com.blumek.notepad;
+package com.blumek.notepad.application.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.blumek.notepad.R;
 
 public class MainActivity extends AppCompatActivity {
 
