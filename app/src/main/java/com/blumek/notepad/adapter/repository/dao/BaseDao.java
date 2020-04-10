@@ -1,4 +1,4 @@
-package com.blumek.notepad.adapter.repository;
+package com.blumek.notepad.adapter.repository.dao;
 
 import androidx.room.Delete;
 import androidx.room.Insert;
