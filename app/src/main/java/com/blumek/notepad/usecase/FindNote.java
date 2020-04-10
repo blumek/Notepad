@@ -7,7 +7,7 @@ import com.blumek.notepad.domain.port.NoteRepository;
 
 import java.util.List;
 
-public class FindNote {
+public final class FindNote {
     private final NoteRepository noteRepository;
 
     public FindNote(NoteRepository noteRepository) {

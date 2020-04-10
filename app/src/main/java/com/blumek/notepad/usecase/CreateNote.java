@@ -1,8 +1,5 @@
 package com.blumek.notepad.usecase;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
 import com.blumek.notepad.domain.entity.Note;
 import com.blumek.notepad.domain.exception.InvalidNoteException;
 import com.blumek.notepad.domain.port.IdGenerator;
@@ -11,7 +8,7 @@ import com.blumek.notepad.domain.port.NoteRepository;
 
 import static com.blumek.notepad.usecase.validator.NoteValidator.isValid;
 
-public class CreateNote {
+public final class CreateNote {
     private final NoteRepository noteRepository;
     private final IdGenerator idGenerator;
     private final NoteEncoder noteEncoder;
