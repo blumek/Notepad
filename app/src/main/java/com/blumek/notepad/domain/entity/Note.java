@@ -3,7 +3,7 @@ package com.blumek.notepad.domain.entity;
 import lombok.Builder;
 import lombok.Value;
 
-@Builder
+@Builder(toBuilder = true)
 @Value
 public class Note {
     String id;
