@@ -2,7 +2,6 @@ package com.blumek.notepad.usecase;
 
 import com.blumek.notepad.domain.entity.Note;
 import com.blumek.notepad.domain.exception.InvalidNoteException;
-import com.blumek.notepad.domain.port.NoteEncoder;
 import com.blumek.notepad.domain.port.NoteRepository;
 
 import org.junit.jupiter.api.Test;
@@ -21,13 +20,9 @@ class UpdateNoteTest {
     private static final String NOTE_TITLE = "NOTE_TITLE";
     private static final String NOTE_CONTENT = "NOTE_CONTENT";
     private static final String NOTE_PASSWORD = "NOTE_PASSWORD";
-    private static final String ENCODED_NOTE_CONTENT = "ENCODED_NOTE_CONTENT";
-    private static final String ENCODED_NOTE_PASSWORD = "ENCODED_NOTE_PASSWORD";
 
     @Mock
     private NoteRepository noteRepository;
-    @Mock
-    private NoteEncoder noteEncoder;
     @InjectMocks
     private UpdateNote updateNote;
 
@@ -40,22 +35,9 @@ class UpdateNoteTest {
                 .password(NOTE_PASSWORD)
                 .build();
 
-        Note encodedNote = note.toBuilder()
-                .content(ENCODED_NOTE_CONTENT)
-                .password(ENCODED_NOTE_PASSWORD)
-                .build();
+        updateNote.update(note);
 
-        Note returnedNote = encodedNote.toBuilder()
-                .content(note.getContent())
-                .build();
-
-        when(noteEncoder.encode(any(Note.class)))
-                .thenReturn(encodedNote);
-
-        assertEquals(returnedNote, updateNote.update(note));
-
-        verify(noteEncoder, times(1)).encode(any(Note.class));
-        verify(noteRepository, times(1)).update(encodedNote);
+        verify(noteRepository).update(note);
     }
 
     @Test
