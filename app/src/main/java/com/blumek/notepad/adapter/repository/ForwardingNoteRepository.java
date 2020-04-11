@@ -7,8 +7,8 @@ import com.blumek.notepad.domain.port.NoteRepository;
 
 import java.util.List;
 
-public class ForwardingNoteRepository implements NoteRepository {
-    final NoteRepository noteRepository;
+public abstract class ForwardingNoteRepository implements NoteRepository {
+    private final NoteRepository noteRepository;
 
     public ForwardingNoteRepository(NoteRepository noteRepository) {
         this.noteRepository = noteRepository;
