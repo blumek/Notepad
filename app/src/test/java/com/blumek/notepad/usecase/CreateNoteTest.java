@@ -9,7 +9,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 
@@ -36,6 +35,6 @@ class CreateNoteTest {
 
         createNote.create(note);
 
-        verify(noteRepository, times(1)).create(note);
+        verify(noteRepository).create(note);
     }
 }

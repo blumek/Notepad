@@ -28,6 +28,6 @@ class DeleteNoteTest {
 
         deleteNote.delete(note);
 
-        verify(noteRepository, times(1)).delete(note);
+        verify(noteRepository).delete(note);
     }
 }
