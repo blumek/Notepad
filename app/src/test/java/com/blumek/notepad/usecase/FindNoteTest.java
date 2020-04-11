@@ -60,7 +60,7 @@ class FindNoteTest {
     }
 
     @Test
-    void findAll_noNotesAvailable() {
+    void findAll_notesNotAvailable() {
         when(noteRepository.findAll())
                 .thenReturn(new MutableLiveData<>(Lists.newArrayList()));
 
