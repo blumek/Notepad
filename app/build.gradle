@@ -49,6 +49,9 @@ dependencies {
     testImplementation group: 'org.mockito', name: 'mockito-core', version: "$mockito_version"
     testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: "$mockito_version"
 
+    def hamcrest_version = "2.2"
+    testImplementation "org.hamcrest:hamcrest:$hamcrest_version"
+
     def lombok_version = "1.18.12"
     annotationProcessor "org.projectlombok:lombok:$lombok_version"
     compileOnly "org.projectlombok:lombok:$lombok_version"

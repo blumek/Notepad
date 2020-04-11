@@ -4,8 +4,11 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.blumek.notepad.domain.entity.Note;
 import com.blumek.notepad.domain.port.NoteRepository;
+import com.blumek.notepad.extension.InstantTaskExecutorExtension;
 import com.google.common.collect.Lists;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,7 +19,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith({
+        MockitoExtension.class,
+        InstantTaskExecutorExtension.class
+})
 class FindNoteTest {
     private static final String NOTE_ID = "NOTE_ID";
     private static final String ANOTHER_NOTE_ID = "ANOTHER_NOTE_ID";
@@ -31,7 +37,10 @@ class FindNoteTest {
         when(noteRepository.findById(anyString()))
                 .thenReturn(new MutableLiveData<>(null));
 
-        assertNull(findNote.findById(NOTE_ID).getValue());
+        findNote.findById(NOTE_ID).observeForever(foundNote -> {
+            assertNull(foundNote);
+            verify(noteRepository).findById(anyString());
+        });
     }
 
     @Test
@@ -43,7 +52,10 @@ class FindNoteTest {
         when(noteRepository.findById(anyString()))
                 .thenReturn(new MutableLiveData<>(note));
 
-        assertEquals(note, findNote.findById(NOTE_ID).getValue());
+        findNote.findById(NOTE_ID).observeForever(foundNote -> {
+            assertEquals(note, foundNote);
+            verify(noteRepository).findById(anyString());
+        });
     }
 
     @Test
@@ -51,7 +63,10 @@ class FindNoteTest {
         when(noteRepository.findAll())
                 .thenReturn(new MutableLiveData<>(Lists.newArrayList()));
 
-        assertEquals(Lists.newArrayList(), findNote.findAll().getValue());
+        findNote.findAll().observeForever(notes -> {
+            assertThat(notes, is(empty()));
+            verify(noteRepository).findAll();
+        });
     }
 
     @Test
@@ -70,6 +85,9 @@ class FindNoteTest {
                         secondNote
                 )));
 
-        assertEquals(Lists.newArrayList(firstNote, secondNote), findNote.findAll().getValue());
+        findNote.findAll().observeForever(notes -> {
+            assertThat(notes, containsInAnyOrder(firstNote, secondNote));
+            verify(noteRepository).findAll();
+        });
     }
 }
