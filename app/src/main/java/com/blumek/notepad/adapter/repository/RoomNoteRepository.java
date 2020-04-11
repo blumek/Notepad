@@ -9,6 +9,7 @@ import com.blumek.notepad.adapter.repository.dao.NoteDao;
 import com.blumek.notepad.adapter.repository.model.RoomNote;
 import com.blumek.notepad.domain.entity.Note;
 import com.blumek.notepad.domain.port.NoteRepository;
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
 
@@ -22,8 +23,15 @@ public class RoomNoteRepository implements NoteRepository {
     }
 
     @Override
-    public LiveData<Note> findById(String id) {
-        return Transformations.map(noteDao.findById(id), RoomNote::toNote);
+    public LiveData<Optional<Note>> findById(String id) {
+        return Transformations.map(noteDao.findById(id), this::toOptionalNote);
+    }
+
+    private Optional<Note> toOptionalNote(RoomNote roomNote) {
+        if (roomNote == null)
+            return Optional.absent();
+
+        return Optional.of(roomNote.toNote());
     }
 
     @Override

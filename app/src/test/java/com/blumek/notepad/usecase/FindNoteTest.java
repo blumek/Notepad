@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.blumek.notepad.domain.entity.Note;
 import com.blumek.notepad.domain.port.NoteRepository;
 import com.blumek.notepad.extension.InstantTaskExecutorExtension;
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -50,10 +51,10 @@ class FindNoteTest {
                 .build();
 
         when(noteRepository.findById(anyString()))
-                .thenReturn(new MutableLiveData<>(note));
+                .thenReturn(new MutableLiveData<>(Optional.of(note)));
 
         findNote.findById(NOTE_ID).observeForever(foundNote -> {
-            assertEquals(note, foundNote);
+            assertEquals(Optional.of(note), foundNote);
             verify(noteRepository).findById(anyString());
         });
     }

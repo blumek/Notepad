@@ -6,6 +6,7 @@ import androidx.lifecycle.Transformations;
 import com.blumek.notepad.domain.entity.Note;
 import com.blumek.notepad.domain.port.NoteContentDecoder;
 import com.blumek.notepad.domain.port.NoteRepository;
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
 import java.util.List;
@@ -20,8 +21,9 @@ public class DecodedNoteContentRepository extends ForwardingNoteRepository imple
     }
 
     @Override
-    public LiveData<Note> findById(String id) {
-        return Transformations.map(super.findById(id), noteContentDecoder::decodeContent);
+    public LiveData<Optional<Note>> findById(String id) {
+        return Transformations.map(super.findById(id), note ->
+                note.transform(noteContentDecoder::decodeContent));
     }
 
     @Override
