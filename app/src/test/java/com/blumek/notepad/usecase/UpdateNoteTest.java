@@ -3,6 +3,7 @@ package com.blumek.notepad.usecase;
 import com.blumek.notepad.domain.entity.Note;
 import com.blumek.notepad.domain.exception.InvalidNoteException;
 import com.blumek.notepad.domain.port.NoteRepository;
+import com.blumek.notepad.domain.port.NoteValidator;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,17 +24,22 @@ class UpdateNoteTest {
 
     @Mock
     private NoteRepository noteRepository;
+    @Mock
+    private NoteValidator noteValidator;
     @InjectMocks
     private UpdateNote updateNote;
 
     @Test
-    void updateTest_noteHasId() {
+    void updateTest_validNote() {
         Note note = Note.builder()
                 .id(NOTE_ID)
                 .title(NOTE_TITLE)
                 .content(NOTE_CONTENT)
                 .password(NOTE_PASSWORD)
                 .build();
+
+        when(noteValidator.isValid(note))
+                .thenReturn(true);
 
         updateNote.update(note);
 
@@ -47,6 +53,9 @@ class UpdateNoteTest {
                 .content(NOTE_CONTENT)
                 .password(NOTE_PASSWORD)
                 .build();
+
+        when(noteValidator.isValid(note))
+                .thenReturn(false);
 
         assertThrows(InvalidNoteException.class, () -> updateNote.update(note));
     }
