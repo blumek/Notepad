@@ -31,7 +31,6 @@ class FindNoteTest {
     @InjectMocks
     private FindNote findNote;
 
-
     @Test
     void findAll_notesNotAvailable() {
         when(noteRepository.findAll())
