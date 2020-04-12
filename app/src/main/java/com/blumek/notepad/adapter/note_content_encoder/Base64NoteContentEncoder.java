@@ -13,10 +13,14 @@ public class Base64NoteContentEncoder implements NoteContentEncoder {
         if (content == null)
             return note;
 
-        String encodedContent = Base64.encodeBase64String(content.getBytes());
+        String encodedContent = getEncodedContent(content);
 
         return note.toBuilder()
                 .content(encodedContent)
                 .build();
+    }
+
+    private String getEncodedContent(String content) {
+        return Base64.encodeBase64String(content.getBytes());
     }
 }
