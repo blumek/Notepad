@@ -38,7 +38,7 @@ class CreateNoteTest {
                 .password(NOTE_PASSWORD)
                 .build();
 
-        when(noteValidator.isValid(any()))
+        when(noteValidator.isValid(note))
                 .thenReturn(true);
 
         createNote.create(note);
@@ -55,7 +55,7 @@ class CreateNoteTest {
                 .password(NOTE_PASSWORD)
                 .build();
 
-        when(noteValidator.isValid(any()))
+        when(noteValidator.isValid(note))
                 .thenReturn(false);
 
         assertThrows(InvalidNoteException.class, () -> createNote.create(note));
