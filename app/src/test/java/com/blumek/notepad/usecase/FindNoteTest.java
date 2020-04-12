@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData;
 import com.blumek.notepad.domain.entity.Note;
 import com.blumek.notepad.domain.port.NoteRepository;
 import com.blumek.notepad.extension.InstantTaskExecutorExtension;
-import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -16,7 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
@@ -33,31 +31,6 @@ class FindNoteTest {
     @InjectMocks
     private FindNote findNote;
 
-    @Test
-    void findById_noteWithGivenIdNotFound() {
-        when(noteRepository.findById(anyString()))
-                .thenReturn(new MutableLiveData<>(null));
-
-        findNote.findById(NOTE_ID).observeForever(foundNote -> {
-            assertNull(foundNote);
-            verify(noteRepository).findById(anyString());
-        });
-    }
-
-    @Test
-    void findById_noteWithGivenIdAvailable() {
-        Note note = Note.builder()
-                .id(NOTE_ID)
-                .build();
-
-        when(noteRepository.findById(anyString()))
-                .thenReturn(new MutableLiveData<>(Optional.of(note)));
-
-        findNote.findById(NOTE_ID).observeForever(foundNote -> {
-            assertEquals(Optional.of(note), foundNote);
-            verify(noteRepository).findById(anyString());
-        });
-    }
 
     @Test
     void findAll_notesNotAvailable() {
