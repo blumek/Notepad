@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 import com.blumek.notepad.adapter.repository.dao.NoteDao;
 import com.blumek.notepad.adapter.repository.model.RoomNote;
 
-@Database(entities = RoomNote.class, version = 2)
+@Database(entities = RoomNote.class, version = 2, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static final String DATABASE_NAME = "app_database";
     private static AppDatabase instance;
