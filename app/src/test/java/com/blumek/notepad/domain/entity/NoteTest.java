@@ -10,7 +10,7 @@ class NoteTest {
     private static final String NOTE_CONTENT = "NOTE_CONTENT";
     private static final String ANOTHER_NOTE_ID = "ANOTHER_NOTE_ID";
     private static final String ANOTHER_NOTE_TITLE = "ANOTHER_NOTE_TITLE";
-    public static final String NOTE_PASSWORD = "NOTE_PASSWORD";
+    private static final String NOTE_PASSWORD = "NOTE_PASSWORD";
 
     @Test
     void builderTest_onlyId() {
