@@ -1,4 +1,4 @@
-package com.blumek.notepad.application.models;
+package com.blumek.notepad.application.model;
 
 import com.blumek.notepad.domain.entity.Note;
 
