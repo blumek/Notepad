@@ -21,6 +21,6 @@ public class Base64NoteContentEncoder implements NoteContentEncoder {
     }
 
     private String getEncodedContent(String content) {
-        return Base64.encodeBase64String(content.getBytes());
+        return new String(Base64.encodeBase64(content.getBytes()));
     }
 }
