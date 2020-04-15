@@ -4,7 +4,6 @@ import com.blumek.notepad.adapter.repository.RoomNoteRepository;
 import com.blumek.notepad.adapter.repository.dao.NoteDao;
 import com.blumek.notepad.application.database.AppDatabase;
 import com.blumek.notepad.domain.port.NoteRepository;
-import com.blumek.notepad.usecase.FindNote;
 
 import javax.inject.Singleton;
 
@@ -35,11 +34,5 @@ public class RoomModule {
     @Provides
     NoteRepository providesNoteRepository(NoteDao noteDao) {
         return new RoomNoteRepository(noteDao);
-    }
-
-    @Singleton
-    @Provides
-    FindNote providesFindNote(NoteRepository noteRepository) {
-        return new FindNote(noteRepository);
     }
 }
