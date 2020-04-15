@@ -85,13 +85,12 @@ public abstract class AppDatabase extends RoomDatabase {
             Note secondNote = Note.builder()
                     .title("Second Note")
                     .content("Sample content...")
-                    .password("PASSWORD123")
                     .build();
 
             Note thirdNote = Note.builder()
                     .title("Third Note")
                     .content("...Sample content...")
-                    .password("BLABLA")
+                    .password("PASSWORD123")
                     .build();
 
             createNote.create(firstNote);
