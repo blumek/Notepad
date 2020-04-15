@@ -31,10 +31,20 @@ class ViewNoteTest {
     }
 
     @Test
-    void fromTest() {
+    void builderTest_hasPassword() {
+        ViewNote viewNote = ViewNote.builder()
+                .hasPassword(true)
+                .build();
+
+        assertTrue(viewNote.hasPassword());
+    }
+
+    @Test
+    void fromTest_hasPassword() {
         ViewNote viewNote = ViewNote.builder()
                 .title(NOTE_TITLE)
                 .content(NOTE_CONTENT)
+                .hasPassword(true)
                 .build();
 
         Note note = Note.builder()
@@ -48,15 +58,34 @@ class ViewNoteTest {
     }
 
     @Test
+    void fromTest_noPassword() {
+        ViewNote viewNote = ViewNote.builder()
+                .title(NOTE_TITLE)
+                .content(NOTE_CONTENT)
+                .hasPassword(false)
+                .build();
+
+        Note note = Note.builder()
+                .id(NOTE_ID)
+                .title(NOTE_TITLE)
+                .content(NOTE_CONTENT)
+                .build();
+
+        assertEquals(viewNote, ViewNote.from(note));
+    }
+
+    @Test
     void equalsTest_equalObjects() {
         ViewNote viewNote = ViewNote.builder()
                 .title(NOTE_TITLE)
                 .content(NOTE_CONTENT)
+                .hasPassword(true)
                 .build();
 
         ViewNote anotherViewNote = ViewNote.builder()
                 .title(NOTE_TITLE)
                 .content(NOTE_CONTENT)
+                .hasPassword(true)
                 .build();
 
         assertEquals(viewNote, anotherViewNote);
@@ -67,10 +96,12 @@ class ViewNoteTest {
         ViewNote viewNote = ViewNote.builder()
                 .title(NOTE_TITLE)
                 .content(NOTE_CONTENT)
+                .hasPassword(true)
                 .build();
 
         ViewNote anotherViewNote = ViewNote.builder()
                 .title(NOTE_TITLE)
+                .hasPassword(false)
                 .build();
 
         assertNotEquals(viewNote, anotherViewNote);
@@ -81,11 +112,13 @@ class ViewNoteTest {
         ViewNote viewNote = ViewNote.builder()
                 .title(NOTE_TITLE)
                 .content(NOTE_CONTENT)
+                .hasPassword(true)
                 .build();
 
         ViewNote anotherViewNote = ViewNote.builder()
                 .title(NOTE_TITLE)
                 .content(NOTE_CONTENT)
+                .hasPassword(true)
                 .build();
 
         assertEquals(viewNote.hashCode(), anotherViewNote.hashCode());
@@ -96,10 +129,12 @@ class ViewNoteTest {
         ViewNote viewNote = ViewNote.builder()
                 .title(NOTE_TITLE)
                 .content(NOTE_CONTENT)
+                .hasPassword(true)
                 .build();
 
         ViewNote anotherViewNote = ViewNote.builder()
                 .title(NOTE_TITLE)
+                .hasPassword(false)
                 .build();
 
         assertNotEquals(viewNote.hashCode(), anotherViewNote.hashCode());
