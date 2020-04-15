@@ -12,16 +12,17 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.blumek.notepad.R;
-import com.blumek.notepad.adapter.repository.RoomNoteRepository;
-import com.blumek.notepad.adapter.repository.dao.NoteDao;
+import com.blumek.notepad.application.NotepadApplication;
 import com.blumek.notepad.application.adapter.NotesAdapter;
-import com.blumek.notepad.application.database.AppDatabase;
 import com.blumek.notepad.application.view_model.NotesViewModel;
-import com.blumek.notepad.application.view_model.factory.NotesViewModelFactory;
+import com.blumek.notepad.application.view_model.factory.ViewModelFactory;
 import com.blumek.notepad.databinding.NotesFragmentBinding;
-import com.blumek.notepad.usecase.FindNote;
+
+import javax.inject.Inject;
 
 public class NotesFragment extends Fragment {
+    @Inject
+    ViewModelFactory viewModelFactory;
     private NotesViewModel viewModel;
     private NotesAdapter notesAdapter;
 
@@ -45,14 +46,17 @@ public class NotesFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        NoteDao noteDao = AppDatabase.getInstance(getActivity()).noteDao();
-        RoomNoteRepository noteRepository = new RoomNoteRepository(noteDao);
-        FindNote findNote = new FindNote(noteRepository);
-        NotesViewModelFactory notesViewModelFactory = new NotesViewModelFactory(findNote);
-        viewModel = new ViewModelProvider(this, notesViewModelFactory)
+        inject();
+        viewModel = new ViewModelProvider(this, viewModelFactory)
                 .get(NotesViewModel.class);
 
         observeNotes();
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    private void inject() {
+        ((NotepadApplication) getActivity().getApplication()).getComponent()
+                .inject(this);
     }
 
     private void observeNotes() {
