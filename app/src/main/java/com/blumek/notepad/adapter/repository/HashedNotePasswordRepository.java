@@ -19,6 +19,9 @@ public class HashedNotePasswordRepository extends ForwardingNoteRepository imple
     }
 
     private Note getNoteWithHashedPassword(Note note) {
+        if (note.getPassword() == null)
+            return note;
+
         String hashedPassword = getHashedPassword(note.getPassword());
 
         return note.toBuilder()

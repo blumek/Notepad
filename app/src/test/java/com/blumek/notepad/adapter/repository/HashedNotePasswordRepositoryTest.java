@@ -11,14 +11,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
 class HashedNotePasswordRepositoryTest {
     private static final String PASSWORD = "PASSWORD";
     private static final String HASHED_PASSWORD = "HASHED_PASSWORD";
+    private static final String NOTE_TITLE = "NOTE_TITLE";
 
     @Mock
     private NoteRepository noteRepository;
@@ -26,8 +27,10 @@ class HashedNotePasswordRepositoryTest {
     private PasswordHasher passwordHasher;
     @InjectMocks
     private HashedNotePasswordRepository hashedNotePasswordRepository;
+
     private Note note;
     private Note hashedPasswordNote;
+    private Note noteWithoutPassword;
 
     @BeforeEach
     void setUp() {
@@ -38,10 +41,14 @@ class HashedNotePasswordRepositoryTest {
         hashedPasswordNote = Note.builder()
                 .password(HASHED_PASSWORD)
                 .build();
+
+        noteWithoutPassword = Note.builder()
+                .title(NOTE_TITLE)
+                .build();
     }
 
     @Test
-    void createTest() {
+    void createTest_passwordAvailable() {
         when(passwordHasher.hash(PASSWORD))
                 .thenReturn(HASHED_PASSWORD);
 
@@ -52,7 +59,14 @@ class HashedNotePasswordRepositoryTest {
     }
 
     @Test
-    void updateTest() {
+    void createTest_passwordNotAvailable() {
+        hashedNotePasswordRepository.create(noteWithoutPassword);
+
+        verify(noteRepository).create(noteWithoutPassword);
+    }
+
+    @Test
+    void updateTest_passwordAvailable() {
         when(passwordHasher.hash(PASSWORD))
                 .thenReturn(HASHED_PASSWORD);
 
@@ -60,5 +74,12 @@ class HashedNotePasswordRepositoryTest {
 
         verify(passwordHasher).hash(PASSWORD);
         verify(noteRepository).update(hashedPasswordNote);
+    }
+
+    @Test
+    void updateTest_passwordNotAvailable() {
+        hashedNotePasswordRepository.update(noteWithoutPassword);
+
+        verify(noteRepository).update(noteWithoutPassword);
     }
 }
