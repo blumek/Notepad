@@ -5,16 +5,20 @@ import androidx.lifecycle.MutableLiveData;
 import com.blumek.notepad.domain.entity.Note;
 import com.blumek.notepad.domain.port.NoteRepository;
 import com.blumek.notepad.extension.InstantTaskExecutorExtension;
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
@@ -31,8 +35,41 @@ class FindNoteTest {
     @InjectMocks
     private FindNote findNote;
 
+    private Note note;
+
+    @BeforeEach
+    void setUp() {
+        note = Note.builder()
+                .id(NOTE_ID)
+                .build();
+    }
+
     @Test
-    void findAll_notesNotAvailable() {
+    void findByIdTest_noteNotExists() {
+        when(noteRepository.findById(NOTE_ID))
+                .thenReturn(new MutableLiveData<>(Optional.absent()));
+
+        findNote.findById(NOTE_ID).observeForever(foundNote -> {
+            assertEquals(Optional.absent(), foundNote);
+
+            verify(noteRepository).findById(NOTE_ID);
+        });
+    }
+
+    @Test
+    void findByIdTest_noteExists() {
+        when(noteRepository.findById(NOTE_ID))
+                .thenReturn(new MutableLiveData<>(Optional.of(note)));
+
+        findNote.findById(NOTE_ID).observeForever(foundNote -> {
+            assertEquals(Optional.of(note), foundNote);
+
+            verify(noteRepository).findById(NOTE_ID);
+        });
+    }
+
+    @Test
+    void findAllTest_notesNotAvailable() {
         when(noteRepository.findAll())
                 .thenReturn(new MutableLiveData<>(Lists.newArrayList()));
 
@@ -43,23 +80,19 @@ class FindNoteTest {
     }
 
     @Test
-    void findAll_twoNotesAvailable() {
-        Note firstNote = Note.builder()
-                .id(NOTE_ID)
-                .build();
-
+    void findAllTest_twoNotesAvailable() {
         Note secondNote = Note.builder()
                 .id(ANOTHER_NOTE_ID)
                 .build();
 
         when(noteRepository.findAll())
                 .thenReturn(new MutableLiveData<>(Lists.newArrayList(
-                        firstNote,
+                        note,
                         secondNote
                 )));
 
         findNote.findAll().observeForever(notes -> {
-            assertThat(notes, containsInAnyOrder(firstNote, secondNote));
+            assertThat(notes, containsInAnyOrder(note, secondNote));
             verify(noteRepository).findAll();
         });
     }
