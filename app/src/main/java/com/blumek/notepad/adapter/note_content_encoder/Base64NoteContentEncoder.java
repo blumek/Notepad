@@ -5,6 +5,8 @@ import com.blumek.notepad.domain.port.NoteContentEncoder;
 
 import org.apache.commons.codec.binary.Base64;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 
 public class Base64NoteContentEncoder implements NoteContentEncoder {
     @Override
@@ -21,6 +23,7 @@ public class Base64NoteContentEncoder implements NoteContentEncoder {
     }
 
     private String getEncodedContent(String content) {
-        return new String(Base64.encodeBase64(content.getBytes()));
+        byte[] contentBytes = content.getBytes(UTF_8);
+        return new String(Base64.encodeBase64(contentBytes), UTF_8);
     }
 }
