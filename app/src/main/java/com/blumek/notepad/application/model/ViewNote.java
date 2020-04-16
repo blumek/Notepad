@@ -10,6 +10,7 @@ import lombok.Value;
 @Builder
 @Value
 public class ViewNote {
+    String id;
     String title;
     String content;
     @Getter(AccessLevel.PRIVATE)
@@ -21,6 +22,7 @@ public class ViewNote {
 
     public static ViewNote from(Note note) {
         return ViewNote.builder()
+                .id(note.getId())
                 .title(note.getTitle())
                 .content(note.getContent())
                 .hasPassword(isPasswordAvailable(note))
