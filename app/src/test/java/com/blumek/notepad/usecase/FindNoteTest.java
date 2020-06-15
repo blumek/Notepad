@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData;
 import com.blumek.notepad.domain.entity.Note;
 import com.blumek.notepad.domain.port.NoteRepository;
 import com.blumek.notepad.extension.InstantTaskExecutorExtension;
-import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -17,6 +16,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -47,10 +48,10 @@ class FindNoteTest {
     @Test
     void findByIdTest_noteNotExists() {
         when(noteRepository.findById(NOTE_ID))
-                .thenReturn(new MutableLiveData<>(Optional.absent()));
+                .thenReturn(new MutableLiveData<>(Optional.empty()));
 
         findNote.findById(NOTE_ID).observeForever(foundNote -> {
-            assertEquals(Optional.absent(), foundNote);
+            assertEquals(Optional.empty(), foundNote);
 
             verify(noteRepository).findById(NOTE_ID);
         });

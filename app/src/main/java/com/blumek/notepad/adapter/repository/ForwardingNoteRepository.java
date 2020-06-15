@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData;
 
 import com.blumek.notepad.domain.entity.Note;
 import com.blumek.notepad.domain.port.NoteRepository;
-import com.google.common.base.Optional;
 
 import java.util.List;
+import java.util.Optional;
 
 abstract class ForwardingNoteRepository implements NoteRepository {
     private final NoteRepository noteRepository;

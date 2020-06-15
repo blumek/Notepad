@@ -9,11 +9,14 @@ import com.blumek.notepad.adapter.repository.dao.NoteDao;
 import com.blumek.notepad.adapter.repository.model.RoomNote;
 import com.blumek.notepad.domain.entity.Note;
 import com.blumek.notepad.domain.port.NoteRepository;
-import com.google.common.base.Optional;
-import com.google.common.collect.Lists;
 
 
 import java.util.List;
+import java.util.Optional;
+
+import lombok.RequiredArgsConstructor;
+
+import static java.util.stream.Collectors.toList;
 
 public class RoomNoteRepository implements NoteRepository {
     private final NoteDao noteDao;
@@ -24,26 +27,26 @@ public class RoomNoteRepository implements NoteRepository {
 
     @Override
     public LiveData<Optional<Note>> findById(String id) {
-        return Transformations.map(noteDao.findById(id), this::toOptionalNote);
+        return Transformations.map(noteDao.findById(id), this::mapToOptionalNote);
     }
 
-    private Optional<Note> toOptionalNote(RoomNote roomNote) {
+    private Optional<Note> mapToOptionalNote(RoomNote roomNote) {
         if (roomNote == null)
-            return Optional.absent();
+            return Optional.empty();
 
         return Optional.of(roomNote.toNote());
     }
 
     @Override
     public LiveData<List<Note>> findAll() {
-        return Transformations.map(noteDao.findAll(), this::toNotes);
+        return Transformations.map(noteDao.findAll(), this::mapToNoteList);
     }
 
-    private List<Note> toNotes(List<RoomNote> roomNotes) {
-        List<Note> notes = Lists.newArrayList();
-        for (RoomNote roomNote : roomNotes)
-            notes.add(roomNote.toNote());
-        return notes;
+    private List<Note> mapToNoteList(List<RoomNote> roomNotes) {
+        return roomNotes
+                .stream()
+                .map(RoomNote::toNote)
+                .collect(toList());
     }
 
     @Override
@@ -64,12 +67,9 @@ public class RoomNoteRepository implements NoteRepository {
                 .execute(RoomNote.from(note));
     }
 
+    @RequiredArgsConstructor
     private static class CreateNoteAsyncTask extends AsyncTask<RoomNote, Void, Void> {
-        private NoteDao noteDao;
-
-        private CreateNoteAsyncTask(NoteDao noteDao) {
-            this.noteDao = noteDao;
-        }
+        private final NoteDao noteDao;
 
         @Override
         protected Void doInBackground(RoomNote... roomNotes) {
@@ -78,12 +78,9 @@ public class RoomNoteRepository implements NoteRepository {
         }
     }
 
+    @RequiredArgsConstructor
     private static class UpdateNoteAsyncTask extends AsyncTask<RoomNote, Void, Void> {
-        private NoteDao noteDao;
-
-        private UpdateNoteAsyncTask(NoteDao noteDao) {
-            this.noteDao = noteDao;
-        }
+        private final NoteDao noteDao;
 
         @Override
         protected Void doInBackground(RoomNote... roomNotes) {
@@ -92,12 +89,9 @@ public class RoomNoteRepository implements NoteRepository {
         }
     }
 
+    @RequiredArgsConstructor
     private static class DeleteNoteAsyncTask extends AsyncTask<RoomNote, Void, Void> {
-        private NoteDao noteDao;
-
-        private DeleteNoteAsyncTask(NoteDao noteDao) {
-            this.noteDao = noteDao;
-        }
+        private final NoteDao noteDao;
 
         @Override
         protected Void doInBackground(RoomNote... roomNotes) {

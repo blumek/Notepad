@@ -6,7 +6,6 @@ import com.blumek.notepad.adapter.repository.dao.NoteDao;
 import com.blumek.notepad.adapter.repository.model.RoomNote;
 import com.blumek.notepad.domain.entity.Note;
 import com.blumek.notepad.extension.InstantTaskExecutorExtension;
-import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +14,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -59,7 +60,7 @@ class RoomNoteRepositoryTest {
                 .thenReturn(new MutableLiveData<>(null));
 
         roomNoteRepository.findById(NOTE_ID).observeForever(foundNote -> {
-            assertEquals(Optional.absent(), foundNote);
+            assertEquals(Optional.empty(), foundNote);
 
             verify(noteDao).findById(anyString());
         });

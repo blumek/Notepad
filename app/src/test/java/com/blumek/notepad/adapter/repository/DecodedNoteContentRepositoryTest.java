@@ -6,7 +6,6 @@ import com.blumek.notepad.domain.entity.Note;
 import com.blumek.notepad.domain.port.NoteContentDecoder;
 import com.blumek.notepad.domain.port.NoteRepository;
 import com.blumek.notepad.extension.InstantTaskExecutorExtension;
-import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +14,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -57,10 +58,10 @@ class DecodedNoteContentRepositoryTest {
     @Test
     void findByIdTest_noteNotExists() {
         when(noteRepository.findById(anyString()))
-                .thenReturn(new MutableLiveData<>(Optional.absent()));
+                .thenReturn(new MutableLiveData<>(Optional.empty()));
 
         decodedNoteContentRepository.findById(NOTE_ID).observeForever(foundNote -> {
-            assertEquals(Optional.absent(), foundNote);
+            assertEquals(Optional.empty(), foundNote);
 
             verify(noteRepository).findById(anyString());
         });
