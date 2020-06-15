@@ -3,14 +3,14 @@
     <data>
         <variable
             name="adapter"
-            type="com.blumek.notepad.application.adapter.NotesAdapter" />
+            type="com.blumek.notepad.application.notes.NotesAdapter" />
     </data>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".application.fragment.NotesFragment">
+        tools:context=".application.notes.NotesFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"

@@ -61,6 +61,7 @@ dependencies {
 
     def lombok_version = "1.18.12"
     annotationProcessor "org.projectlombok:lombok:$lombok_version"
+    //noinspection AnnotationProcessorOnCompilePath
     compileOnly "org.projectlombok:lombok:$lombok_version"
 
     def guava_version = "28.2"

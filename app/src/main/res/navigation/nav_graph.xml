@@ -6,6 +6,6 @@
 
     <fragment
         android:id="@+id/notesFragment"
-        android:name="com.blumek.notepad.application.fragment.NotesFragment"
+        android:name="com.blumek.notepad.application.notes.NotesFragment"
         android:label="NotesFragment" />
 </navigation>
