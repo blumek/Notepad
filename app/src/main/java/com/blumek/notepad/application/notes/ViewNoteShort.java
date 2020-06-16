@@ -10,9 +10,9 @@ import lombok.Value;
 @Builder
 @Value
 public class ViewNoteShort {
-
     String id;
     String title;
+
     @Getter(AccessLevel.PRIVATE)
     boolean hasPassword;
 

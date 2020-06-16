@@ -16,10 +16,12 @@ import com.google.common.collect.Lists;
 import java.util.List;
 
 public final class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> {
+    private NoteActionListener listener;
     private List<ViewNoteShort> viewNotesShort;
 
-    public NotesAdapter() {
+    public NotesAdapter(NoteActionListener listener) {
         viewNotesShort = Lists.newArrayList();
+        this.listener = listener;
     }
 
     public void setViewNotesShort(List<ViewNoteShort> viewNotesShort) {
@@ -46,7 +48,7 @@ public final class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(viewNotesShort.get(position));
+        holder.bind(viewNotesShort.get(position), listener);
     }
 
     @Override
@@ -62,9 +64,15 @@ public final class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHo
             this.binding = binding;
         }
 
-        void bind(ViewNoteShort viewNoteShort) {
+        void bind(ViewNoteShort viewNoteShort, NoteActionListener listener) {
             binding.setNote(viewNoteShort);
             binding.executePendingBindings();
+
+            itemView.setOnClickListener(view -> listener.onClick(viewNoteShort));
         }
+    }
+
+    interface NoteActionListener {
+        void onClick(ViewNoteShort noteShort);
     }
 }
