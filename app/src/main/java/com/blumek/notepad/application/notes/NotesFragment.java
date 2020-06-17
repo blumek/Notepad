@@ -8,12 +8,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.blumek.notepad.R;
+import com.blumek.notepad.adapter.password_hasher.SHA256PasswordHasher;
 import com.blumek.notepad.adapter.repository.RoomNoteRepository;
 import com.blumek.notepad.adapter.repository.dao.NoteDao;
 import com.blumek.notepad.application.AppDatabase;
@@ -21,6 +23,7 @@ import com.blumek.notepad.application.notes.NotesAdapter.NoteActionListener;
 import com.blumek.notepad.databinding.NotesFragmentBinding;
 import com.blumek.notepad.domain.port.NoteRepository;
 import com.blumek.notepad.usecase.FindNote;
+import com.blumek.notepad.usecase.NoteAuthentication;
 
 public final class NotesFragment extends Fragment {
     private NotesViewModel viewModel;
@@ -42,23 +45,29 @@ public final class NotesFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        NoteActionListener listener = noteShort -> openNoteDetails(view, noteShort);
+        NoteActionListener listener = noteShort -> {
+            if (!noteShort.hasPassword())
+                viewModel.openNoteDetails(view, noteShort);
+            else {
+                openPasswordDialog();
+            }
+        };
 
         notesAdapter = new NotesAdapter(listener);
         binding.setAdapter(notesAdapter);
     }
 
-    private void openNoteDetails(@NonNull View view, ViewNoteShort noteShort) {
-        NavDirections direction = NotesFragmentDirections
-                .actionNotesFragmentToNoteDetailsFragment(noteShort.getId());
-
-        Navigation.findNavController(view).navigate(direction);
+    private void openPasswordDialog() {
+        DialogFragment dialog = new NotePasswordDialog();
+        dialog.show(getFragmentManager(), "Test");
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         viewModel = getViewModel();
+        binding.setViewModel(viewModel);
+
         observeNotes();
     }
 
@@ -67,7 +76,9 @@ public final class NotesFragment extends Fragment {
         NoteDao noteDao = database.noteDao();
         NoteRepository noteRepository = new RoomNoteRepository(noteDao);
         FindNote findNote = new FindNote(noteRepository);
-        NotesViewModelFactory notesViewModelFactory = new NotesViewModelFactory(findNote);
+        NoteAuthentication noteAuthentication = new NoteAuthentication(noteRepository,
+                new SHA256PasswordHasher());
+        NotesViewModelFactory notesViewModelFactory = new NotesViewModelFactory(findNote, noteAuthentication);
 
         return new ViewModelProvider(this, notesViewModelFactory)
                 .get(NotesViewModel.class);

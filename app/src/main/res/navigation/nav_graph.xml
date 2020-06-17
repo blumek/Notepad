@@ -8,20 +8,28 @@
     <fragment
         android:id="@+id/notesFragment"
         android:name="com.blumek.notepad.application.notes.NotesFragment"
-        android:label="NotesFragment"
+        android:label="@string/notes"
         tools:layout="@layout/notes_fragment">
         <action
             android:id="@+id/action_notesFragment_to_noteDetailsFragment"
             app:destination="@id/noteDetailsFragment" />
+        <action
+            android:id="@+id/action_notesFragment_to_noteCreationFragment"
+            app:destination="@id/noteCreationFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/noteDetailsFragment"
         android:name="com.blumek.notepad.application.note_details.NoteDetailsFragment"
-        android:label="note_details_fragment"
+        android:label="@string/note_details"
         tools:layout="@layout/note_details_fragment">
         <argument
             android:name="id"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/noteCreationFragment"
+        android:name="com.blumek.notepad.application.note_creation.NoteCreationFragment"
+        android:label="@string/note_creation"
+        tools:layout="@layout/note_creation_fragment" />
 </navigation>

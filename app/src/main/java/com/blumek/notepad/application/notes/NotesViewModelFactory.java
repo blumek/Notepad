@@ -5,12 +5,13 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.blumek.notepad.usecase.FindNote;
+import com.blumek.notepad.usecase.NoteAuthentication;
 
 final class NotesViewModelFactory implements ViewModelProvider.Factory {
     private final NotesViewModel notesViewModel;
 
-    public NotesViewModelFactory(final FindNote findNote) {
-        notesViewModel = new NotesViewModel(findNote);
+    public NotesViewModelFactory(FindNote findNote, NoteAuthentication noteAuthentication) {
+        notesViewModel = new NotesViewModel(findNote, noteAuthentication);
     }
 
     @SuppressWarnings("unchecked")

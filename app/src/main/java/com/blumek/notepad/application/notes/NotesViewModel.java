@@ -2,6 +2,7 @@ package com.blumek.notepad.application.notes;
 
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
@@ -16,7 +17,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-final class NotesViewModel extends ViewModel {
+public final class NotesViewModel extends ViewModel {
     private final NoteAuthentication noteAuthentication;
     private final LiveData<List<Note>> notes;
 
@@ -37,5 +38,19 @@ final class NotesViewModel extends ViewModel {
 
     public LiveData<Boolean> authenticateWithPassword(String id, String password) {
         return noteAuthentication.authenticateWithPassword(id, password);
+    }
+
+    public void openNoteDetails(View view, ViewNoteShort noteShort) {
+        NavDirections direction = NotesFragmentDirections
+                .actionNotesFragmentToNoteDetailsFragment(noteShort.getId());
+
+        Navigation.findNavController(view).navigate(direction);
+    }
+
+    public void openNoteCreation(View view) {
+        NavDirections direction = NotesFragmentDirections
+                .actionNotesFragmentToNoteCreationFragment();
+
+        Navigation.findNavController(view).navigate(direction);
     }
 }

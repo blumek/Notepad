@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.blumek.notepad.application.note_creation.NoteCreationViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".application.note_creation.NoteCreationFragment">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_above="@id/save_button"
+            android:layout_marginBottom="0dp"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <EditText
+                    android:id="@+id/title_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={viewModel.note.title}"
+                    android:textSize="22sp"
+                    android:hint="@string/title"
+                    android:singleLine="true"
+                    android:layout_marginTop="10dp" />
+
+                <EditText
+                    android:id="@+id/content_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:inputType="text|textMultiLine"
+                    android:hint="@string/note_content_hint"
+                    android:text="@={viewModel.note.content}"
+                    android:textSize="22sp"
+                    android:gravity="top"
+                    android:layout_marginTop="15dp" />
+
+                <TextView
+                    android:text="@string/security"
+                    android:textSize="25sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp" />
+
+                <EditText
+                    android:id="@+id/password_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    android:hint="@string/password"
+                    android:text="@={viewModel.note.password}"
+                    android:singleLine="true"
+                    android:inputType="textPassword"
+                    android:layout_marginTop="15dp" />
+
+            </LinearLayout>
+        </ScrollView>
+
+        <Button
+            android:id="@+id/save_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="0dp"
+            android:padding="17dp"
+            android:textSize="16sp"
+            android:text="@string/save"
+            android:onClick="@{viewModel::onSaveClick}"/>
+
+    </RelativeLayout>
+</layout>
