@@ -10,9 +10,8 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
 
 import com.blumek.notepad.R;
 import com.blumek.notepad.adapter.password_hasher.SHA256PasswordHasher;
@@ -24,6 +23,8 @@ import com.blumek.notepad.databinding.NotesFragmentBinding;
 import com.blumek.notepad.domain.port.NoteRepository;
 import com.blumek.notepad.usecase.FindNote;
 import com.blumek.notepad.usecase.NoteAuthentication;
+
+import java.util.Objects;
 
 public final class NotesFragment extends Fragment {
     private NotesViewModel viewModel;
@@ -47,19 +48,29 @@ public final class NotesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         NoteActionListener listener = noteShort -> {
             if (!noteShort.hasPassword())
-                viewModel.openNoteDetails(view, noteShort);
-            else {
-                openPasswordDialog();
-            }
+                viewModel.openNoteDetails(view, noteShort.getId());
+            else
+                openPasswordDialog(view, noteShort);
         };
 
         notesAdapter = new NotesAdapter(listener);
         binding.setAdapter(notesAdapter);
     }
 
-    private void openPasswordDialog() {
-        DialogFragment dialog = new NotePasswordDialog();
-        dialog.show(getFragmentManager(), "Test");
+    private void openPasswordDialog(View view, ViewNoteShort noteShort) {
+        DialogFragment dialog = new NotePasswordDialog(password ->
+                viewModel.authenticateWithPassword(noteShort.getId(), password)
+                        .observe(getViewLifecycleOwner(), isAuthenticated -> {
+                            if (isAuthenticated)
+                                viewModel.openNoteDetails(view, noteShort.getId());
+                        }));
+
+        dialog.show(getSupportFragmentManager(), null);
+    }
+
+    private FragmentManager getSupportFragmentManager() {
+        return Objects.requireNonNull(getActivity())
+                .getSupportFragmentManager();
     }
 
     @Override

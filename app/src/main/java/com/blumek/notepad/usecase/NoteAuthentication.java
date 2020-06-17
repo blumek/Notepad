@@ -26,11 +26,10 @@ public final class NoteAuthentication {
     }
 
     private boolean authenticateNote(Note note, String password) {
-        String hashedPassword = passwordHasher.hash(password);
-        return isNoteAuthenticated(note, hashedPassword);
-    }
+        if (note.getPassword() == null)
+            return true;
 
-    private boolean isNoteAuthenticated(Note foundNote, String hashedPassword) {
-        return foundNote.getPassword() == null || foundNote.getPassword().equals(hashedPassword);
+        String hashedPassword = passwordHasher.hash(password);
+        return note.getPassword().equals(hashedPassword);
     }
 }

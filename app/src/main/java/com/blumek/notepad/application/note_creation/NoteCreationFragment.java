@@ -15,8 +15,10 @@ import com.blumek.notepad.R;
 import com.blumek.notepad.adapter.id_generator.UUIDGenerator;
 import com.blumek.notepad.adapter.note_content_encoder.Base64NoteContentEncoder;
 import com.blumek.notepad.adapter.note_validator.NoteCreationValidator;
+import com.blumek.notepad.adapter.password_hasher.SHA256PasswordHasher;
 import com.blumek.notepad.adapter.repository.EncodedNoteContentRepository;
 import com.blumek.notepad.adapter.repository.GeneratedIdNoteRepository;
+import com.blumek.notepad.adapter.repository.HashedNotePasswordRepository;
 import com.blumek.notepad.adapter.repository.RoomNoteRepository;
 import com.blumek.notepad.adapter.repository.dao.NoteDao;
 import com.blumek.notepad.application.AppDatabase;
@@ -50,11 +52,12 @@ public final class NoteCreationFragment extends Fragment {
     private NoteCreationViewModel getViewModel() {
         AppDatabase database = AppDatabase.getInstance(getContext());
         NoteDao noteDao = database.noteDao();
-        NoteRepository noteRepository = new EncodedNoteContentRepository(
-                new GeneratedIdNoteRepository(
-                        new RoomNoteRepository(noteDao),
-                        new UUIDGenerator()),
-                new Base64NoteContentEncoder()
+        NoteRepository noteRepository = new GeneratedIdNoteRepository(
+                new EncodedNoteContentRepository
+                        (new HashedNotePasswordRepository(
+                                new RoomNoteRepository(noteDao), new SHA256PasswordHasher()
+                        ), new Base64NoteContentEncoder()),
+                new UUIDGenerator()
         );
 
         CreateNote createNote = new CreateNote(noteRepository, new NoteCreationValidator());

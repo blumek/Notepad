@@ -40,9 +40,9 @@ public final class NotesViewModel extends ViewModel {
         return noteAuthentication.authenticateWithPassword(id, password);
     }
 
-    public void openNoteDetails(View view, ViewNoteShort noteShort) {
+    public void openNoteDetails(View view, String id) {
         NavDirections direction = NotesFragmentDirections
-                .actionNotesFragmentToNoteDetailsFragment(noteShort.getId());
+                .actionNotesFragmentToNoteDetailsFragment(id);
 
         Navigation.findNavController(view).navigate(direction);
     }
