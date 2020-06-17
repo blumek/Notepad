@@ -29,7 +29,7 @@
     </fragment>
     <fragment
         android:id="@+id/noteCreationFragment"
-        android:name="com.blumek.notepad.application.note_creation.NoteCreationFragment"
+        android:name="com.blumek.notepad.application.note_persistence.NoteCreationFragment"
         android:label="@string/note_creation"
         tools:layout="@layout/note_creation_fragment" />
 </navigation>

@@ -5,13 +5,13 @@
     <data>
         <variable
             name="viewModel"
-            type="com.blumek.notepad.application.note_creation.NoteCreationViewModel" />
+            type="com.blumek.notepad.application.note_persistence.NoteCreationViewModel" />
     </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".application.note_creation.NoteCreationFragment">
+        tools:context=".application.note_persistence.NoteCreationFragment">
 
         <ScrollView
             android:layout_width="match_parent"

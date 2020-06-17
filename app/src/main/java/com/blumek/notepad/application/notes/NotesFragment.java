@@ -50,22 +50,26 @@ public final class NotesFragment extends Fragment {
             if (!noteShort.hasPassword())
                 viewModel.openNoteDetails(view, noteShort.getId());
             else
-                openPasswordDialog(view, noteShort);
+                openPasswordDialog(view, noteShort.getId());
         };
 
         notesAdapter = new NotesAdapter(listener);
         binding.setAdapter(notesAdapter);
     }
 
-    private void openPasswordDialog(View view, ViewNoteShort noteShort) {
+    private void openPasswordDialog(View view, String id) {
         DialogFragment dialog = new NotePasswordDialog(password ->
-                viewModel.authenticateWithPassword(noteShort.getId(), password)
-                        .observe(getViewLifecycleOwner(), isAuthenticated -> {
-                            if (isAuthenticated)
-                                viewModel.openNoteDetails(view, noteShort.getId());
-                        }));
+                authenticationListener(view, id, password));
 
         dialog.show(getSupportFragmentManager(), null);
+    }
+
+    private void authenticationListener(View view, String id, String password) {
+        viewModel.authenticateWithPassword(id, password)
+                .observe(getViewLifecycleOwner(), isAuthenticated -> {
+                    if (isAuthenticated)
+                        viewModel.openNoteDetails(view, id);
+                });
     }
 
     private FragmentManager getSupportFragmentManager() {

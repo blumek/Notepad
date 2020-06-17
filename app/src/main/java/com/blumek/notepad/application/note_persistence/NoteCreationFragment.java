@@ -1,4 +1,4 @@
-package com.blumek.notepad.application.note_creation;
+package com.blumek.notepad.application.note_persistence;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
