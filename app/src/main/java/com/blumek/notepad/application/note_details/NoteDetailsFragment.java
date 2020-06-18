@@ -2,6 +2,9 @@ package com.blumek.notepad.application.note_details;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -24,6 +27,28 @@ import com.blumek.notepad.usecase.FindNote;
 public final class NoteDetailsFragment extends Fragment {
     private NoteDetailsViewModel viewModel;
     private NoteDetailsFragmentBinding binding;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.note_details_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.change_password) {
+            viewModel.getNote().observe(getViewLifecycleOwner(),
+                    note -> viewModel.openChangeNotePassword(getView(), note.getId()));
+        }
+
+        return true;
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,

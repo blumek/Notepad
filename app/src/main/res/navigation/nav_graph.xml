@@ -29,6 +29,9 @@
         <action
             android:id="@+id/action_noteDetailsFragment_to_noteUpdateFragment"
             app:destination="@id/noteUpdateFragment" />
+        <action
+            android:id="@+id/action_noteDetailsFragment_to_changeNotePasswordFragment"
+            app:destination="@id/changeNotePasswordFragment" />
     </fragment>
     <fragment
         android:id="@+id/noteCreationFragment"
@@ -40,6 +43,15 @@
         android:name="com.blumek.notepad.application.note_persistence.NoteUpdateFragment"
         android:label="NoteUpdateFragment"
         tools:layout="@layout/note_update_fragment">
+        <argument
+            android:name="id"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/changeNotePasswordFragment"
+        android:name="com.blumek.notepad.application.change_note_password.ChangeNotePasswordFragment"
+        android:label="ChangeNotePasswordFragment"
+        tools:layout="@layout/change_note_password_fragment">
         <argument
             android:name="id"
             app:argType="string" />

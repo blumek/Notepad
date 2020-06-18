@@ -21,7 +21,7 @@
             app:srcCompat="@drawable/ic_baseline_edit_24"
             android:layout_margin="16dp"
             android:layout_gravity="bottom|end"
-            android:onClick="@{viewModel::openNoteUpdate}"/>
+            android:onClick="@{(view) -> viewModel.openNoteUpdate(view, viewModel.note.id)}"/>
 
         <ScrollView
             android:layout_width="match_parent"

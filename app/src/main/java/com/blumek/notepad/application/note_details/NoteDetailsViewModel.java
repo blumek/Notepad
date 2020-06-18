@@ -22,9 +22,16 @@ public final class NoteDetailsViewModel extends ViewModel {
                 foundNote -> foundNote.orElseThrow(IllegalArgumentException::new));
     }
 
-    public void openNoteUpdate(View view) {
+    public void openNoteUpdate(View view, String noteId) {
         NavDirections direction = NoteDetailsFragmentDirections
-                .actionNoteDetailsFragmentToNoteUpdateFragment(note.getValue().getId());
+                .actionNoteDetailsFragmentToNoteUpdateFragment(noteId);
+
+        Navigation.findNavController(view).navigate(direction);
+    }
+
+    public void openChangeNotePassword(View view, String noteId) {
+        NavDirections direction = NoteDetailsFragmentDirections
+                .actionNoteDetailsFragmentToChangeNotePasswordFragment(noteId);
 
         Navigation.findNavController(view).navigate(direction);
     }

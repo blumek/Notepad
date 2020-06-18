@@ -16,7 +16,7 @@ import com.blumek.notepad.R;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class NotePasswordDialog extends DialogFragment {
+public final class NotePasswordDialog extends DialogFragment {
     private final InputListener listener;
 
     public interface InputListener {
