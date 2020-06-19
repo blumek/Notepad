@@ -5,16 +5,17 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.blumek.notepad.domain.port.PasswordHasher;
+import com.blumek.notepad.usecase.ChangeNotePassword;
 import com.blumek.notepad.usecase.FindNote;
-import com.blumek.notepad.usecase.UpdateNote;
 
 final class ChangeNotePasswordViewModelFactory implements ViewModelProvider.Factory {
     private final ChangeNotePasswordViewModel changeNotePasswordViewModel;
 
-    public ChangeNotePasswordViewModelFactory(UpdateNote updateNote, FindNote findNote, String id,
+    public ChangeNotePasswordViewModelFactory(ChangeNotePassword changeNotePassword,
+                                              FindNote findNote, String id,
                                               PasswordHasher passwordHasher) {
         changeNotePasswordViewModel =
-                new ChangeNotePasswordViewModel(updateNote, findNote, id, passwordHasher);
+                new ChangeNotePasswordViewModel(changeNotePassword, findNote, id, passwordHasher);
     }
 
     @SuppressWarnings("unchecked")

@@ -1,18 +1,15 @@
 package com.blumek.notepad.application.change_note_password;
 
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.blumek.notepad.R;
 import com.blumek.notepad.adapter.note_validator.NoteUpdateValidator;
@@ -25,6 +22,7 @@ import com.blumek.notepad.application.note_details.NoteDetailsFragmentArgs;
 import com.blumek.notepad.databinding.ChangeNotePasswordFragmentBinding;
 import com.blumek.notepad.domain.port.NoteRepository;
 import com.blumek.notepad.domain.port.PasswordHasher;
+import com.blumek.notepad.usecase.ChangeNotePassword;
 import com.blumek.notepad.usecase.FindNote;
 import com.blumek.notepad.usecase.UpdateNote;
 
@@ -74,8 +72,11 @@ public final class ChangeNotePasswordFragment extends Fragment {
 
         UpdateNote updateNote = new UpdateNote(updateNoteRepository, new NoteUpdateValidator());
 
+        ChangeNotePassword changeNotePassword = new ChangeNotePassword(updateNote, findNote);
+
         ChangeNotePasswordViewModelFactory changeNotePasswordViewModelFactory =
-                new ChangeNotePasswordViewModelFactory(updateNote, findNote, noteId, passwordHasher);
+                new ChangeNotePasswordViewModelFactory(changeNotePassword, findNote, noteId,
+                        passwordHasher);
 
         return new ViewModelProvider(this, changeNotePasswordViewModelFactory)
                 .get(ChangeNotePasswordViewModel.class);

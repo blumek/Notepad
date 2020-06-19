@@ -9,26 +9,27 @@ import androidx.navigation.Navigation;
 
 import com.blumek.notepad.domain.entity.Note;
 import com.blumek.notepad.domain.port.PasswordHasher;
+import com.blumek.notepad.usecase.ChangeNotePassword;
 import com.blumek.notepad.usecase.FindNote;
-import com.blumek.notepad.usecase.UpdateNote;
 
 public final class ChangeNotePasswordViewModel extends ViewModel {
-    private final UpdateNote updateNote;
     private final PasswordHasher passwordHasher;
     private final MutableLiveData<Note> note;
     private final MutableLiveData<ChangePassword> changePassword;
+    private final ChangeNotePassword changeNotePassword;
 
-    public ChangeNotePasswordViewModel(UpdateNote updateNote, FindNote findNote, String noteId,
-                                       PasswordHasher passwordHasher) {
-        this.updateNote = updateNote;
+    public ChangeNotePasswordViewModel(ChangeNotePassword changeNotePassword, FindNote findNote,
+                                       String noteId, PasswordHasher passwordHasher) {
         this.passwordHasher = passwordHasher;
+        this.changeNotePassword = changeNotePassword;
         this.changePassword = new MutableLiveData<>(ChangePassword.empty());
         this.note = new MutableLiveData<>();
         findNote.findById(noteId).observeForever(foundNote -> {
-            if (foundNote.isPresent()) {
-                note.postValue(foundNote.get());
-            } else
+            if (!foundNote.isPresent()) {
                 throw new IllegalArgumentException();
+            }
+
+            note.postValue(foundNote.get());
         });
     }
 
@@ -44,31 +45,26 @@ public final class ChangeNotePasswordViewModel extends ViewModel {
         if (noteToChangePassword == null || providedChangePassword == null)
             throw new NullPointerException();
 
-        if (!providedChangePassword.getNewPassword()
-                .equals(providedChangePassword.getNewPasswordConfirmation()))
+        String newPassword = providedChangePassword.getNewPassword();
+        String newPasswordConfirmation = providedChangePassword.getNewPasswordConfirmation();
+        if (!newPassword.equals(newPasswordConfirmation))
             return;
 
-        if (noteToChangePassword.getPassword() == null &&
-                providedChangePassword.getOldPassword() == null)
-            changePassword(noteToChangePassword, providedChangePassword);
+        if (isNoteWithoutPassword(noteToChangePassword, providedChangePassword.getOldPassword()))
+            changeNotePassword.changeById(noteToChangePassword.getId(), newPassword);
 
         String providedOldPassword = providedChangePassword.getOldPassword();
         if (providedOldPassword == null)
             return;
 
         String hashedProvidedOldPassword = passwordHasher.hash(providedOldPassword);
-
         if (hashedProvidedOldPassword.equals(noteToChangePassword.getPassword())) {
-            changePassword(noteToChangePassword, providedChangePassword);
+            changeNotePassword.changeById(noteToChangePassword.getId(), newPassword);
         }
     }
 
-    private void changePassword(Note note, ChangePassword changePassword) {
-        Note noteToUpdate = note.toBuilder()
-                .password(changePassword.getNewPassword())
-                .build();
-
-        updateNote.update(noteToUpdate);
+    private boolean isNoteWithoutPassword(Note noteToChangePassword, String password) {
+        return noteToChangePassword.getPassword() == null && password == null;
     }
 
     public LiveData<ChangePassword> getChangePassword() {
