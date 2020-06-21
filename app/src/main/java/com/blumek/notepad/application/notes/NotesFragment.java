@@ -14,7 +14,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.blumek.notepad.R;
-import com.blumek.notepad.adapter.password_hasher.BCryptPasswordHasher;
 import com.blumek.notepad.adapter.password_validator.BCryptPasswordValidator;
 import com.blumek.notepad.adapter.repository.RoomNoteRepository;
 import com.blumek.notepad.adapter.repository.dao.NoteDao;
