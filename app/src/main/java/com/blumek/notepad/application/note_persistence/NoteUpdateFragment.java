@@ -13,8 +13,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.blumek.notepad.R;
 import com.blumek.notepad.adapter.id_generator.UUIDGenerator;
-import com.blumek.notepad.adapter.note_content_decoder.Base64NoteContentDecoder;
-import com.blumek.notepad.adapter.note_content_encoder.Base64NoteContentEncoder;
+import com.blumek.notepad.adapter.note_content_decoder.AESNoteContentEncoder;
+import com.blumek.notepad.adapter.note_content_encoder.AESNoteContentDecoder;
 import com.blumek.notepad.adapter.note_validator.NoteUpdateValidator;
 import com.blumek.notepad.adapter.repository.DecodedNoteContentRepository;
 import com.blumek.notepad.adapter.repository.EncodedNoteContentRepository;
@@ -22,10 +22,14 @@ import com.blumek.notepad.adapter.repository.GeneratedIdNoteRepository;
 import com.blumek.notepad.adapter.repository.RoomNoteRepository;
 import com.blumek.notepad.adapter.repository.dao.NoteDao;
 import com.blumek.notepad.application.AppDatabase;
+import com.blumek.notepad.application.ApplicationKeyStore;
 import com.blumek.notepad.databinding.NoteUpdateFragmentBinding;
 import com.blumek.notepad.domain.port.NoteRepository;
 import com.blumek.notepad.usecase.FindNote;
 import com.blumek.notepad.usecase.UpdateNote;
+
+import static com.blumek.notepad.application.crypto.AES.INITIALIZATION_VECTOR;
+import static com.blumek.notepad.application.crypto.AES.KEY;
 
 public final class NoteUpdateFragment extends Fragment {
     private NoteUpdateFragmentBinding binding;
@@ -55,16 +59,21 @@ public final class NoteUpdateFragment extends Fragment {
         NoteDao noteDao = database.noteDao();
         RoomNoteRepository noteRepository = new RoomNoteRepository(noteDao);
 
+        ApplicationKeyStore applicationKeyStore = new ApplicationKeyStore();
+        AESNoteContentEncoder noteContentEncoder = new AESNoteContentEncoder(
+                applicationKeyStore.getKey(KEY), INITIALIZATION_VECTOR);
         NoteRepository noteUpdateRepository = new GeneratedIdNoteRepository(
                 new EncodedNoteContentRepository(
                         noteRepository,
-                        new Base64NoteContentEncoder()),
+                        noteContentEncoder),
                 new UUIDGenerator());
 
         UpdateNote updateNote = new UpdateNote(noteUpdateRepository, new NoteUpdateValidator());
 
+        AESNoteContentDecoder noteContentDecoder = new AESNoteContentDecoder(
+                applicationKeyStore.getKey(KEY), INITIALIZATION_VECTOR);
         NoteRepository noteFindRepository = new DecodedNoteContentRepository(
-                noteRepository, new Base64NoteContentDecoder());
+                noteRepository, noteContentDecoder);
 
         FindNote findNote = new FindNote(noteFindRepository);
 

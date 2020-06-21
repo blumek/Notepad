@@ -15,14 +15,19 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.blumek.notepad.R;
-import com.blumek.notepad.adapter.note_content_decoder.Base64NoteContentDecoder;
+import com.blumek.notepad.adapter.note_content_encoder.AESNoteContentDecoder;
 import com.blumek.notepad.adapter.repository.DecodedNoteContentRepository;
 import com.blumek.notepad.adapter.repository.RoomNoteRepository;
 import com.blumek.notepad.adapter.repository.dao.NoteDao;
 import com.blumek.notepad.application.AppDatabase;
+import com.blumek.notepad.application.ApplicationKeyStore;
 import com.blumek.notepad.databinding.NoteDetailsFragmentBinding;
+import com.blumek.notepad.domain.port.NoteContentDecoder;
 import com.blumek.notepad.domain.port.NoteRepository;
 import com.blumek.notepad.usecase.FindNote;
+
+import static com.blumek.notepad.application.crypto.AES.INITIALIZATION_VECTOR;
+import static com.blumek.notepad.application.crypto.AES.KEY;
 
 public final class NoteDetailsFragment extends Fragment {
     private NoteDetailsViewModel viewModel;
@@ -80,8 +85,11 @@ public final class NoteDetailsFragment extends Fragment {
     private NoteDetailsViewModel getViewModel(String noteId) {
         AppDatabase database = AppDatabase.getInstance(getContext());
         NoteDao noteDao = database.noteDao();
+        ApplicationKeyStore applicationKeyStore = new ApplicationKeyStore();
+        NoteContentDecoder noteContentDecoder = new AESNoteContentDecoder(
+                applicationKeyStore.getKey(KEY), INITIALIZATION_VECTOR);
         NoteRepository noteRepository = new DecodedNoteContentRepository(
-                new RoomNoteRepository(noteDao), new Base64NoteContentDecoder());
+                new RoomNoteRepository(noteDao), noteContentDecoder);
         FindNote findNote = new FindNote(noteRepository);
         NoteDetailsViewModelFactory noteDetailsViewModelFactory = new NoteDetailsViewModelFactory(findNote, noteId);
 
