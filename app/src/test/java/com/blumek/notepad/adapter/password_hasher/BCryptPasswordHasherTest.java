@@ -7,7 +7,8 @@ import org.mindrot.jbcrypt.BCrypt;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BCryptPasswordHasherTest {
-    public static final String PASSWORD = "PASSWORD";
+    private static final String PASSWORD = "PASSWORD";
+
     private BCryptPasswordHasher bCryptPasswordHasher;
 
     @BeforeEach
