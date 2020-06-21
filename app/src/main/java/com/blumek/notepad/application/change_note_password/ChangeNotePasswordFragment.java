@@ -13,7 +13,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.blumek.notepad.R;
 import com.blumek.notepad.adapter.note_validator.NoteUpdateValidator;
-import com.blumek.notepad.adapter.password_hasher.SHA256PasswordHasher;
+import com.blumek.notepad.adapter.password_hasher.BCryptPasswordHasher;
+import com.blumek.notepad.adapter.password_validator.BCryptPasswordValidator;
 import com.blumek.notepad.adapter.repository.HashedNotePasswordRepository;
 import com.blumek.notepad.adapter.repository.RoomNoteRepository;
 import com.blumek.notepad.adapter.repository.dao.NoteDao;
@@ -22,6 +23,7 @@ import com.blumek.notepad.application.note_details.NoteDetailsFragmentArgs;
 import com.blumek.notepad.databinding.ChangeNotePasswordFragmentBinding;
 import com.blumek.notepad.domain.port.NoteRepository;
 import com.blumek.notepad.domain.port.PasswordHasher;
+import com.blumek.notepad.domain.port.PasswordValidator;
 import com.blumek.notepad.usecase.ChangeNotePassword;
 import com.blumek.notepad.usecase.FindNote;
 import com.blumek.notepad.usecase.UpdateNote;
@@ -65,7 +67,9 @@ public final class ChangeNotePasswordFragment extends Fragment {
 
         FindNote findNote = new FindNote(noteRepository);
 
-        PasswordHasher passwordHasher = new SHA256PasswordHasher();
+        PasswordHasher passwordHasher = new BCryptPasswordHasher();
+
+        PasswordValidator passwordValidator = new BCryptPasswordValidator();
 
         NoteRepository updateNoteRepository =
                 new HashedNotePasswordRepository(noteRepository, passwordHasher);
@@ -76,7 +80,7 @@ public final class ChangeNotePasswordFragment extends Fragment {
 
         ChangeNotePasswordViewModelFactory changeNotePasswordViewModelFactory =
                 new ChangeNotePasswordViewModelFactory(changeNotePassword, findNote, noteId,
-                        passwordHasher);
+                        passwordValidator);
 
         return new ViewModelProvider(this, changeNotePasswordViewModelFactory)
                 .get(ChangeNotePasswordViewModel.class);

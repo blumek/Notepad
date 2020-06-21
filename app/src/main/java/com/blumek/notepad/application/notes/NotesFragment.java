@@ -14,7 +14,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.blumek.notepad.R;
-import com.blumek.notepad.adapter.password_hasher.SHA256PasswordHasher;
+import com.blumek.notepad.adapter.password_hasher.BCryptPasswordHasher;
+import com.blumek.notepad.adapter.password_validator.BCryptPasswordValidator;
 import com.blumek.notepad.adapter.repository.RoomNoteRepository;
 import com.blumek.notepad.adapter.repository.dao.NoteDao;
 import com.blumek.notepad.application.AppDatabase;
@@ -30,7 +31,6 @@ public final class NotesFragment extends Fragment {
     private NotesViewModel viewModel;
     private NotesAdapter notesAdapter;
     private NotesFragmentBinding binding;
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -92,7 +92,7 @@ public final class NotesFragment extends Fragment {
         NoteRepository noteRepository = new RoomNoteRepository(noteDao);
         FindNote findNote = new FindNote(noteRepository);
         NoteAuthentication noteAuthentication = new NoteAuthentication(noteRepository,
-                new SHA256PasswordHasher());
+                new BCryptPasswordValidator());
         NotesViewModelFactory notesViewModelFactory = new NotesViewModelFactory(findNote, noteAuthentication);
 
         return new ViewModelProvider(this, notesViewModelFactory)

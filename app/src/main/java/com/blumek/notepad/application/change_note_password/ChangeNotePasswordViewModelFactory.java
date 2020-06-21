@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.blumek.notepad.domain.port.PasswordHasher;
+import com.blumek.notepad.domain.port.PasswordValidator;
 import com.blumek.notepad.usecase.ChangeNotePassword;
 import com.blumek.notepad.usecase.FindNote;
 
@@ -13,9 +13,9 @@ final class ChangeNotePasswordViewModelFactory implements ViewModelProvider.Fact
 
     public ChangeNotePasswordViewModelFactory(ChangeNotePassword changeNotePassword,
                                               FindNote findNote, String id,
-                                              PasswordHasher passwordHasher) {
+                                              PasswordValidator passwordValidator) {
         changeNotePasswordViewModel =
-                new ChangeNotePasswordViewModel(changeNotePassword, findNote, id, passwordHasher);
+                new ChangeNotePasswordViewModel(changeNotePassword, findNote, id, passwordValidator);
     }
 
     @SuppressWarnings("unchecked")

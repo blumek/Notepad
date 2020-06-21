@@ -12,7 +12,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import com.blumek.notepad.adapter.id_generator.UUIDGenerator;
 import com.blumek.notepad.adapter.note_content_decoder.AESNoteContentEncoder;
 import com.blumek.notepad.adapter.note_validator.NoteCreationValidator;
-import com.blumek.notepad.adapter.password_hasher.SHA256PasswordHasher;
+import com.blumek.notepad.adapter.password_hasher.BCryptPasswordHasher;
 import com.blumek.notepad.adapter.repository.EncodedNoteContentRepository;
 import com.blumek.notepad.adapter.repository.GeneratedIdNoteRepository;
 import com.blumek.notepad.adapter.repository.HashedNotePasswordRepository;
@@ -68,7 +68,7 @@ public abstract class AppDatabase extends RoomDatabase {
             NoteRepository noteRepository = new GeneratedIdNoteRepository(
                     new EncodedNoteContentRepository
                             (new HashedNotePasswordRepository(
-                                    new RoomNoteRepository(noteDao), new SHA256PasswordHasher()
+                                    new RoomNoteRepository(noteDao), new BCryptPasswordHasher()
                             ), noteContentEncoder),
                     new UUIDGenerator()
             );

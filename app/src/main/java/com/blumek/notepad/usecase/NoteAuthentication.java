@@ -5,18 +5,16 @@ import androidx.lifecycle.Transformations;
 
 import com.blumek.notepad.domain.entity.Note;
 import com.blumek.notepad.domain.port.NoteRepository;
-import com.blumek.notepad.domain.port.PasswordHasher;
+import com.blumek.notepad.domain.port.PasswordValidator;
+
+import lombok.RequiredArgsConstructor;
 
 import static java.lang.String.format;
 
+@RequiredArgsConstructor
 public final class NoteAuthentication {
     private final NoteRepository noteRepository;
-    private final PasswordHasher passwordHasher;
-
-    public NoteAuthentication(NoteRepository noteRepository, PasswordHasher passwordHasher) {
-        this.noteRepository = noteRepository;
-        this.passwordHasher = passwordHasher;
-    }
+    private final PasswordValidator passwordValidator;
 
     public LiveData<Boolean> authenticateWithPassword(String id, String password) {
         return Transformations.map(noteRepository.findById(id),
@@ -29,7 +27,6 @@ public final class NoteAuthentication {
         if (note.getPassword() == null)
             return true;
 
-        String hashedPassword = passwordHasher.hash(password);
-        return note.getPassword().equals(hashedPassword);
+        return passwordValidator.validate(password, note.getPassword());
     }
 }

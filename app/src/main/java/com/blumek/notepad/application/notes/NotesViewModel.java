@@ -2,7 +2,6 @@ package com.blumek.notepad.application.notes;
 
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
