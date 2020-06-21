@@ -32,7 +32,6 @@ import static com.blumek.notepad.application.crypto.AES.INITIALIZATION_VECTOR;
 import static com.blumek.notepad.application.crypto.AES.KEY;
 
 public final class NoteCreationFragment extends Fragment {
-    private NoteCreationViewModel viewModel;
     private NoteCreationFragmentBinding binding;
 
     @Override
@@ -49,7 +48,7 @@ public final class NoteCreationFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewModel = getViewModel();
+        NoteCreationViewModel viewModel = getViewModel();
 
         binding.setViewModel(viewModel);
     }
